@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}LTRRST-1179 - Top Scores{% endblock %}
+
+{% block page_content %}
+
+
+<div class="container">
+  <h2>Leader Board</h2>           
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Bank Roll</th>
+      </tr>
+    </thead>
+    <tbody>
+		{% for q in users %}
+			<tr>
+			<td>{{ q.username }}</td>
+			<td>${{ q.money }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+  </table>
+</div>
+
+{% endblock %}

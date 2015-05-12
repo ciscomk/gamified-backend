@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}LTRRST-1179 - {{ user.username }}{% endblock %}
+
+{% block head %}
+
+{{ super() }}
+
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root }};
+  </script>
+
+<script>
+	setInterval(function() {
+		$("#div1").load("scenario");}, 20000);
+</script>
+
+{% if user.supplement == 1 %}
+<script>
+	setInterval(function() {
+		$("#div2").load("supplement");}, 20000);
+</script>
+{% endif %}  
+
+
+{% endblock %}
+
+{% block page_content %}
+	
+    <div class="row">
+	<div class="col-md-8"><h1> {{ user.username }}'s Portal </h1></div>
+	<div class="col-md-4"><h2>Current Bank:${{ user.money }}</h2></div>
+	</div>
+
+
+<div class="row">
+  <div class="col-md-8">
+	  <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Inbox</h3>
+  </div>
+  <div class="panel-body">
+    <div id="div1"><h2>0 Messages</h2></div>
+  </div>
+</div>
+</div>
+  
+  
+  
+  
+<div class="col-md-4">
+	  <!-- Button trigger modal for Finished -->
+<button type="button" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#FinishModal">
+  Finished!
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="FinishModal" tabindex="-1" role="dialog" aria-labelledby="FinishModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="FinishModalLabel">Ready to get paid?</h4>
+      </div>
+      <div class="modal-body">
+        By hitting submit, you are signaling that you have finished and are ready to be graded by the customer. Incomplete work is subject to a financial penalty.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        {{ wtf.quick_form(finishform) }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<!-- Button trigger modal for HELP -->
+<button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#HelpModal">
+  Help!
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="HelpModal" tabindex="-1" role="dialog" aria-labelledby="HelpModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="Help!" id="HelpModalLabel">Help!</h4>
+      </div>
+      <div class="modal-body">
+		Warning: By signaling for help, you will incur a financial penalty
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        {{ wtf.quick_form(helpform) }}
+      </div>
+    </div>
+  </div>
+</div>
+
+ <p>
+	<br>
+	<button class="btn btn-info btn-lg btn-block" onClick="window.open( 'https://ciscolive1.cisco.com/', '_blank' )">Click here to access the topology</button>
+
+</div>
+	 
+</div>
+{% if user.supplement == 1 %}
+    <div class="row">
+	 <div class="col-md-8">
+	  <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Supplemental Materials</h3>
+  </div>
+  <div class="panel-body">
+    <div id="div2"><h2>Receiving Supplemental Materials...</h2></div>
+  </div>
+</div>
+</div>
+
+{% endif %}  
+
+	
+  
+<!-- </div> -->
+	  
+{% endblock %}

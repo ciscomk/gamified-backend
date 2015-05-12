@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Introduction to BGP Lab (LTRRST-1179){% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+     <div class="jumbotron">
+		<h1>Hello, {% if current_user.is_authenticated() %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
+        {% if current_user.is_authenticated() %}
+			<p>
+				<a href="/user/{{ current_user.username }}">Click Here</a> to access your portal.
+			</p>
+		{% else %}
+			<p>
+				Ok, we need to get you started, so let's get your payroll account setup. <br>
+				If you already have an account, click 'Sign In' to the upper right. <br>
+				<br>
+				<a href="/auth/register" class="btn btn-primary btn-lg" role="button">Register</a>
+			</p>
+        {% endif %}
+        </div>
+    </p>
+</div>
+{% endblock %}
