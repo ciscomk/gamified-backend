@@ -8,10 +8,9 @@ from flask.ext.login import login_required, current_user
 from flask.ext.admin import Admin, BaseView
 from .. import admin
 from flask.ext.admin.contrib.sqla import ModelView
-from datetime import datetime
-from sqlalchemy import desc
 import datetime
-
+import time
+from sqlalchemy import desc
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -42,20 +41,21 @@ def user(username):
 	if current_user.username == username:
 		finishform = FinishForm(prefix="finishform")
 		helpform = HelpForm(prefix="helpform")
-		if helpform.validate_on_submit():
-			print "help"
-			print helpform.errors
-			print "finish"
-			print finishform.errors
+		if helpform.validate_on_submit() and helpform.submit.data:
+			#print "help"
+			#print helpform.errors
+			#print "finish"
+			#print finishform.errors
 			current_user.money = current_user.money - 5
 			current_user.needs_help = True
-			current_user.help_time = datetime.now().time()
+			current_user.help_time = datetime.datetime.now().time()
 			flash('Help is on the way! Do not refresh your browser.')
-		elif finishform.validate_on_submit():
-			print helpform.errors
-			print finishform.errors
+		elif finishform.validate_on_submit() and finishform.submit.data:
+			#print helpform.errors
+			#print finishform.errors
 			current_user.finished_scenario = True
-			current_user.scenario_time = datetime.now().time()
+			current_user.scenario_time = datetime.datetime.now().time()
+			flash('Hang back - The customer is coming to check your work. Do not refresh your browser.')
 		return render_template('user.html', user=user, finishform=finishform, helpform=helpform)
 	return abort(401)
 
@@ -73,7 +73,7 @@ def loadscenario():
 		return render_template('T2A2.html')
 	else:
 		return render_template('nomessages.html')
-		
+
 @main.route('/user/supplement')
 def loadsupplement():
 	if current_user.current_scenario == 10:
@@ -95,7 +95,7 @@ def changeScenario(scenario):
 		u.current_scenario = scenario
 	db.session.commit()
 	return 'Changes Committed!'
-	
+
 @main.route('/reset/')
 def resetUsers():
 	users = User.query.all()
