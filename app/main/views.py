@@ -71,6 +71,8 @@ def loadscenario():
 		return render_template('T2A1.html')
 	elif current_user.current_scenario == 22:
 		return render_template('T2A2.html')
+	elif current_user.current_scenario == 30:
+		return render_template('T3A0.html')
 	else:
 		return render_template('nomessages.html')
 
