@@ -24,9 +24,9 @@ class User(UserMixin, db.Model):
     help_time = db.Column(db.Time)
     finished_scenario = db.Column(db.Boolean, default=False, index=True)
     scenario_time = db.Column(db.Time)
-    current_scenario = db.Column(db.Integer, default=10)
+    current_scenario = db.Column(db.Integer, default=1)
     supplement = db.Column(db.Boolean)
-	
+
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')

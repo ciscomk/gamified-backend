@@ -61,6 +61,10 @@ def user(username):
 
 @main.route('/user/scenario')
 def loadscenario():
+    #Labs use two digits:First digit is lab #, 2nd is advanced level (0=base)
+    #Ex: T1A0 = Task 1, Advanced Task 0 (not an advanced task)
+    #BGP Lab uses Scenarios: 10-39.
+    #IPv6 Lab uses Scenario Range: 40-69
 	if current_user.current_scenario == 10:
 		return render_template('T1A0.html')
 	elif current_user.current_scenario == 11:
@@ -73,6 +77,20 @@ def loadscenario():
 		return render_template('T2A2.html')
 	elif current_user.current_scenario == 30:
 		return render_template('T3A0.html')
+	elif current_user.current_scenario == 31:
+		return render_template('T3A1.html')
+	elif current_user.current_scenario == 40:
+		return render_template('T4A0.html')
+	elif current_user.current_scenario == 41:
+		return render_template('T4A1.html')
+	elif current_user.current_scenario == 50:
+		return render_template('T5A0.html')
+	elif current_user.current_scenario == 51:
+		return render_template('T5A1.html')
+	elif current_user.current_scenario == 60:
+		return render_template('T6A0.html')
+	elif current_user.current_scenario == 61:
+		return render_template('T6A1.html')
 	else:
 		return render_template('nomessages.html')
 
@@ -82,6 +100,14 @@ def loadsupplement():
 		return render_template('sup-T1.html')
 	elif current_user.current_scenario == 20:
 		return render_template('sup-T2.html')
+	elif current_user.current_scenario == 30:
+		return render_template('sup-T3.html')
+	elif current_user.current_scenario == 40:
+		return render_template('sup-T4.html')
+	elif current_user.current_scenario == 50:
+		return render_template('sup-T5.html')
+	elif current_user.current_scenario == 60:
+		return render_template('sup-T6.html')
 	else:
 		return render_template('nomessages.html')
 

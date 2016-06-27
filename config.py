@@ -3,16 +3,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'BGP is very easy'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-    #MAIL_SERVER = 'smtp.googlemail.com'
-    #MAIL_PORT = 587
-    #MAIL_USE_TLS = True
-    #MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    #MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    #LTRRST1179_MAIL_SUBJECT_PREFIX = '[LTRRST-1179]'
-    #LTRRST1179_MAIL_SENDER = 'LTRRST-1179 Admin <ltrrst1179@cisco.com>'
-    #LTRRST1179_ADMIN = os.environ.get('LTRRST1179_ADMIN')
 
     @staticmethod
     def init_app(app):
