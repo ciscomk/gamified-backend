@@ -13,5 +13,5 @@ User level ids dictate which task is to be delivered.
 Tasks are configured in '/app/main/views.py'
 
 ## Details
-To run locally, set an environmental variable for the secrect key (bash syntax):
-`export SECRET_KEY="mysekritvalue"`
+To run locally, set an environmental variable for the secrect key.
+For example (bash syntax): `export SECRET_KEY="mysekritvalue"`
