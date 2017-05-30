@@ -7,9 +7,25 @@
 
 {{ super() }}
 
+<script src="{{ url_for('static', filename='js/user.js') }}"></script>
+
+<!-- Modal
 <script type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root }};
   </script>
+  '#my-data'
+-->
+
+<!--
+<meta id="my-data" data-name="{{user.username}}">
+
+<script>
+	setInterval(function() {
+		$("#moneySection").load("{{user.username}}");}, 10000);
+</script>
+
+{{ user.id }}
+-->
 
 <script>
 	setInterval(function() {
@@ -30,7 +46,7 @@
 
     <div class="row">
 	<div class="col-md-8"><h1> {{ user.username }}'s Portal </h1></div>
-	<div class="col-md-4"><h2>Current Bank:${{ user.money }}</h2></div>
+	<div id="moneySection" class="col-md-4"><h2>Current Bank:$<span id="userMoney">{{ user.money }}</span></h2></div>
 	</div>
 
 
@@ -50,12 +66,12 @@
 
 
 <div class="col-md-4">
-	  <!-- Button trigger modal for Finished -->
-<button type="button" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#FinishModal">
+	  <!-- Button trigger modal for Finished data-toggle="modal" data-target="#FinishModal" -->
+<button type="button" class="btn btn-success btn-lg btn-block finishButton">
   Finished!
 </button>
 
-<!-- Modal -->
+<!-- Modal
 <div class="modal fade" id="FinishModal" tabindex="-1" role="dialog" aria-labelledby="FinishModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -73,14 +89,15 @@
     </div>
   </div>
 </div>
+-->
 
 <br>
-<!-- Button trigger modal for HELP -->
-<button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#HelpModal">
+<!-- Button trigger modal for HELP  data-toggle="modal" data-target="#HelpModal"-->
+<button type="button" class="btn btn-danger btn-lg btn-block helpButton" user_id ="{{ user.id }}">
   Help!
 </button>
 
-<!-- Modal -->
+<!-- Modal
 <div class="modal fade" id="HelpModal" tabindex="-1" role="dialog" aria-labelledby="HelpModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -98,10 +115,10 @@
     </div>
   </div>
 </div>
-
+-->
  <p>
 	<br>
-	<!-- <button class="btn btn-info btn-lg btn-block" onClick="window.open( 'https://ciscolive1.cisco.com/', '_blank' )">Click here to access the topology</button> -->
+	<!--<button class="btn btn-info btn-lg btn-block" onClick="window.open( 'https://ciscolive1.cisco.com/', '_blank' )">Click here to access the topology</button>-->
 
 </div>
 

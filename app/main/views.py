@@ -1,4 +1,4 @@
-from flask import render_template, session, redirect, url_for, abort, current_app, flash
+from flask import render_template, session, redirect, url_for, abort, current_app, flash, jsonify, request
 from .. import db
 from ..models import User
 #from ..email import send_email
@@ -12,6 +12,32 @@ import datetime
 import time
 from sqlalchemy import desc
 
+# SPARK BOT
+import requests, json
+import os
+SPARK_BOT_TOKEN = os.environ.get('SPARK_BOT_TOKEN')
+SPARK_BOT_EMAIL = os.environ.get('SPARK_BOT_EMAIL')
+SPARK_BOT_ROOM_ID = os.environ.get('SPARK_BOT_ROOM_ID')
+
+spark_host = "https://api.ciscospark.com/"
+spark_headers = {}
+spark_headers["Content-type"] = "application/json"
+spark_headers["Authorization"] = "Bearer " + SPARK_BOT_TOKEN
+app_headers = {}
+app_headers["Content-type"] = "application/json"
+
+
+def send_message_to_room(room_id, message):
+    spark_u = spark_host + "v1/messages"
+    message_body = {
+        "roomId" : room_id,
+        "markdown" : message
+    }
+    page = requests.post(spark_u, headers = spark_headers, json=message_body)
+    message = page.json()
+    return message
+
+# End Spark Bot
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
@@ -41,23 +67,58 @@ def user(username):
 	if current_user.username == username:
 		finishform = FinishForm(prefix="finishform")
 		helpform = HelpForm(prefix="helpform")
-		if helpform.validate_on_submit() and helpform.submit.data:
+		#if helpform.validate_on_submit() and helpform.submit.data:
 			#print "help"
 			#print helpform.errors
 			#print "finish"
 			#print finishform.errors
-			current_user.money = current_user.money - 5
-			current_user.needs_help = True
-			current_user.help_time = datetime.datetime.now().time()
-			flash('Help is on the way! Do not refresh your browser.')
-		elif finishform.validate_on_submit() and finishform.submit.data:
+		#	current_user.money = current_user.money - 5
+		#	current_user.needs_help = True
+		#	current_user.help_time = datetime.datetime.now().time()
+		#	flash('Help is on the way! Do not refresh your browser.')
+		#elif finishform.validate_on_submit() and finishform.submit.data:
 			#print helpform.errors
 			#print finishform.errors
-			current_user.finished_scenario = True
-			current_user.scenario_time = datetime.datetime.now().time()
-			flash('Hang back - The customer is coming to check your work. Do not refresh your browser.')
+		#	current_user.finished_scenario = True
+		#	current_user.scenario_time = datetime.datetime.now().time()
+		#	flash('Hang back - The customer is coming to check your work. Do not refresh your browser.')
 		return render_template('user.html', user=user, finishform=finishform, helpform=helpform)
 	return abort(401)
+
+@main.route('/help', methods=['GET', 'POST'])
+def help():
+
+    #user = User.query.filter_by(id=request.form['id'].first())
+    current_user.help_time = datetime.datetime.now().time()
+    current_user.needs_help = True
+    current_user.money = current_user.money - 5
+
+    db.session.commit()
+
+    room_id = SPARK_BOT_ROOM_ID
+    message = "**" +current_user.username + "** has requested **help**!\n"
+    send_message_to_room(room_id, message)
+
+    return jsonify({'result' : 'success', 'user_money' : current_user.money})
+
+@main.route('/finish', methods=['GET', 'POST'])
+def finish():
+
+    #user = User.query.filter_by(id=request.form['id'].first())
+    current_user.finished_scenario = True
+    current_user.scenario_time = datetime.datetime.now().time()
+
+    db.session.commit()
+
+    room_id = SPARK_BOT_ROOM_ID
+    message = "**" +current_user.username + "** has signaled that they're **finished**!\n"
+    send_message_to_room(room_id, message)
+
+    return jsonify({'result' : 'success'})
+
+@main.route('/refreshmoney', methods=['GET'])
+def returnmoney():
+	return jsonify({'result' : 'success', 'user_money' : current_user.money})
 
 @main.route('/user/scenario')
 def loadscenario():
@@ -118,9 +179,15 @@ def showtop():
 
 @main.route('/change/<scenario>')
 def changeScenario(scenario):
+	scenarioMessage = "*Scenario #" +scenario + " is locked and loaded! All user attributes have been reset!*\n"
+	send_message_to_room(SPARK_BOT_ROOM_ID, scenarioMessage)
 	users = User.query.all()
 	for u in users:
 		u.current_scenario = scenario
+		u.needs_help = False
+		u.help_time = datetime.time()
+		u.finished_scenario = False
+		u.scenario_time = datetime.time()
 	db.session.commit()
 	return 'Changes Committed!'
 
