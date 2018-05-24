@@ -1,3 +1,5 @@
+_this project has been deprecated. the current version of this project can be found here: https://github.com/ciscomk/funandprofitlabs_portal_
+
 # Gamified Portal
 
 Developed in Python and Flask
